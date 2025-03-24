@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:think_todo_list/bottomBar/bottom_nav_bar.dart';
-import 'package:think_todo_list/home/home_page.dart';
 
 void main() async {
   await Hive.initFlutter();
 
   var box = await Hive.openBox('todoBox');
+  var OfficeBox = await Hive.openBox('officeToDo');
   runApp(const MyApp());
 }
 

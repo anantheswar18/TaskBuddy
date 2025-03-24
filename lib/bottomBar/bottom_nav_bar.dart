@@ -21,20 +21,29 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomNavBarColor = _selectedIndex == 0 ? Colors.white : Colors.black;
+    final selectedItemColor = _selectedIndex == 0 ? Colors.blue : Colors.blue;
+    final unselectedItemColor =
+        _selectedIndex == 0 ? Colors.grey : Colors.blue.withOpacity(0.5);
+
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.person_3_outlined),
+            label: 'Personal',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.badge_outlined),
             label: 'Office',
           ),
         ],
         currentIndex: _selectedIndex,
+        selectedItemColor: selectedItemColor,
+        unselectedItemColor: unselectedItemColor,
+        backgroundColor: bottomNavBarColor,
+        type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
       ),
     );
