@@ -5,8 +5,9 @@ import 'package:think_todo_list/bottomBar/bottom_nav_bar.dart';
 void main() async {
   await Hive.initFlutter();
 
-  var box = await Hive.openBox('todoBox');
-  var OfficeBox = await Hive.openBox('officeToDo');
+  // Open both boxes
+  await Hive.openBox('mainTodoBox');
+  await Hive.openBox('secondaryTodoBox');
   runApp(const MyApp());
 }
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TaskBuddy',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

@@ -11,7 +11,6 @@ class OfficeHomePage extends StatefulWidget {
 }
 
 class _OfficeHomePageState extends State<OfficeHomePage> {
-  final _todoBox = Hive.box('todoBox');
   ToDoDatabase db = ToDoDatabase();
   TextEditingController controller = TextEditingController();
   String selectedPriority = 'Medium'; // Default priority
@@ -33,11 +32,17 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
   @override
   void initState() {
     // when the app is loading very first time
-    if (_todoBox.get("TODOLIST") == null) {
-      db.createInitialData();
+    // if (_todoBox.get("TODOLIST") == null) {
+    //   db.createInitialSecondaryData();
+    // } else {
+    //   // There data already exist
+    //   db.loadSecondaryData();
+    // }
+    if (Hive.box('secondaryTodoBox').isEmpty) {
+      db.createInitialSecondaryData();
+      db.updateSecondaryDatabase();
     } else {
-      // There data already exist
-      db.loadData();
+      db.loadSecondaryData();
     }
 
     super.initState();
@@ -45,13 +50,13 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
 
   void checkBoxChange(bool? value, int index) {
     setState(() {
-      db.toDolist[index][1] = !db.toDolist[index][1];
+      db.secondaryToDoList[index][1] = !db.secondaryToDoList[index][1];
     });
-    db.updateDataBase();
+    db.updateSecondaryDatabase();
   }
 
   int getCompletedCount() {
-    return db.toDolist.where((task) => task[1] == false).length;
+    return db.secondaryToDoList.where((task) => task[1] == false).length;
   }
 
   void saveNewTask() {
@@ -59,19 +64,19 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
 
     setState(() {
       // Add task with priority: [task name, isCompleted, priority]
-      db.toDolist.add([controller.text, false, selectedPriority]);
+      db.secondaryToDoList.add([controller.text, false, selectedPriority]);
       controller.clear();
       selectedPriority = 'Medium'; // Reset to default
     });
     Navigator.of(context).pop();
-    db.updateDataBase();
+    db.updateSecondaryDatabase();
   }
 
   void deleteTask(int index) {
     setState(() {
-      db.toDolist.removeAt(index);
+      db.secondaryToDoList.removeAt(index);
     });
-    db.updateDataBase();
+    db.updateSecondaryDatabase();
   }
 
   void createNewTask() {
@@ -200,9 +205,10 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
   }
 
   void editTask(int index) {
-    controller.text = db.toDolist[index][0];
-    selectedPriority =
-        db.toDolist[index].length > 2 ? db.toDolist[index][2] : 'Medium';
+    controller.text = db.secondaryToDoList[index][0];
+    selectedPriority = db.secondaryToDoList[index].length > 2
+        ? db.secondaryToDoList[index][2]
+        : 'Medium';
 
     showDialog(
       context: context,
@@ -310,13 +316,13 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    db.toDolist[index][0] = controller.text;
-                    db.toDolist[index][2] = selectedPriority;
+                    db.secondaryToDoList[index][0] = controller.text;
+                    db.secondaryToDoList[index][2] = selectedPriority;
                     controller.clear();
                     selectedPriority = 'Medium';
                   });
                   Navigator.of(context).pop();
-                  db.updateDataBase();
+                  db.updateSecondaryDatabase();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryBlue,
@@ -457,7 +463,7 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      '${db.toDolist.length} tasks',
+                      '${db.secondaryToDoList.length} tasks',
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -494,8 +500,8 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 // Get task priority or set default to 'Medium' for backward compatibility
-                String priority = db.toDolist[index].length > 2
-                    ? db.toDolist[index][2]
+                String priority = db.secondaryToDoList[index].length > 2
+                    ? db.secondaryToDoList[index][2]
                     : 'Medium';
 
                 return Padding(
@@ -513,7 +519,7 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
                     ),
                     child: Dismissible(
                       // Use Dismissible here
-                      key: Key(db.toDolist[index][0]),
+                      key: Key(db.secondaryToDoList[index][0]),
                       background: Container(
                         decoration: BoxDecoration(
                           color: primaryBlue
@@ -596,7 +602,7 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
                         leading: Transform.scale(
                           scale: 1.2,
                           child: Checkbox(
-                            value: db.toDolist[index][1],
+                            value: db.secondaryToDoList[index][1],
                             onChanged: (value) => checkBoxChange(value, index),
                             activeColor: primaryBlue,
                             checkColor: Colors.white,
@@ -614,14 +620,14 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
                           ),
                         ),
                         title: Text(
-                          db.toDolist[index][0],
+                          db.secondaryToDoList[index][0],
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            decoration: db.toDolist[index][1]
+                            decoration: db.secondaryToDoList[index][1]
                                 ? TextDecoration.lineThrough
                                 : TextDecoration.none,
-                            color: db.toDolist[index][1]
+                            color: db.secondaryToDoList[index][1]
                                 ? secondaryTextColor
                                 : textColor,
                           ),
@@ -650,7 +656,7 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
                   ),
                 );
               },
-              childCount: db.toDolist.length,
+              childCount: db.secondaryToDoList.length,
             ),
           ),
           // Footer padding

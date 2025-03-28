@@ -11,7 +11,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _todoBox = Hive.box('todoBox');
   ToDoDatabase db = ToDoDatabase();
   TextEditingController controller = TextEditingController();
   String selectedPriority = 'Medium'; // Default priority
@@ -25,25 +24,31 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // when the app is loading very first time
-    if (_todoBox.get("TODOLIST") == null) {
-      db.createInitialData();
+    // if (_todoBox.get("TODOLIST") == null) {
+    //   db.createInitialMainData();
+    // } else {
+    //   // There data already exist
+    //   db.loadMainData();
+    // }
+    // Check if this is the first time opening the app
+    if (Hive.box('mainTodoBox').isEmpty) {
+      db.createInitialMainData();
+      db.updateMainDatabase();
     } else {
-      // There data already exist
-      db.loadData();
+      db.loadMainData();
     }
-
     super.initState();
   }
 
   void checkBoxChange(bool? value, int index) {
     setState(() {
-      db.toDolist[index][1] = !db.toDolist[index][1];
+      db.mainToDoList[index][1] = !db.mainToDoList[index][1];
     });
-    db.updateDataBase();
+    db.updateMainDatabase();
   }
 
   int getCompletedCount() {
-    return db.toDolist.where((task) => task[1] == false).length;
+    return db.mainToDoList.where((task) => task[1] == false).length;
   }
 
   void saveNewTask() {
@@ -51,19 +56,19 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       // Add task with priority: [task name, isCompleted, priority]
-      db.toDolist.add([controller.text, false, selectedPriority]);
+      db.mainToDoList.add([controller.text, false, selectedPriority]);
       controller.clear();
       selectedPriority = 'Medium'; // Reset to default
     });
     Navigator.of(context).pop();
-    db.updateDataBase();
+    db.updateMainDatabase();
   }
 
   void deleteTask(int index) {
     setState(() {
-      db.toDolist.removeAt(index);
+      db.mainToDoList.removeAt(index);
     });
-    db.updateDataBase();
+    db.updateMainDatabase();
   }
 
   void createNewTask() {
@@ -191,9 +196,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void editTask(int index) {
-    controller.text = db.toDolist[index][0];
-    selectedPriority =
-        db.toDolist[index].length > 2 ? db.toDolist[index][2] : 'Medium';
+    controller.text = db.mainToDoList[index][0];
+    selectedPriority = db.mainToDoList[index].length > 2
+        ? db.mainToDoList[index][2]
+        : 'Medium';
 
     showDialog(
       context: context,
@@ -300,13 +306,13 @@ class _HomePageState extends State<HomePage> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    db.toDolist[index][0] = controller.text;
-                    db.toDolist[index][2] = selectedPriority;
+                    db.mainToDoList[index][0] = controller.text;
+                    db.mainToDoList[index][2] = selectedPriority;
                     controller.clear();
                     selectedPriority = 'Medium';
                   });
                   Navigator.of(context).pop();
-                  db.updateDataBase();
+                  db.updateMainDatabase();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: appBarColor,
@@ -447,7 +453,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      '${db.toDolist.length} tasks',
+                      '${db.mainToDoList.length} tasks',
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -484,8 +490,8 @@ class _HomePageState extends State<HomePage> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 // Get task priority or set default to 'Medium' for backward compatibility
-                String priority = db.toDolist[index].length > 2
-                    ? db.toDolist[index][2]
+                String priority = db.mainToDoList[index].length > 2
+                    ? db.mainToDoList[index][2]
                     : 'Medium';
 
                 return Padding(
@@ -502,7 +508,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Dismissible(
                       // Use Dismissible here
-                      key: Key(db.toDolist[index][0]),
+                      key: Key(db.mainToDoList[index][0]),
                       background: Container(
                         decoration: BoxDecoration(
                           color: Colors.blue, // Background for edit
@@ -571,7 +577,7 @@ class _HomePageState extends State<HomePage> {
                         leading: Transform.scale(
                           scale: 1.2,
                           child: Checkbox(
-                            value: db.toDolist[index][1],
+                            value: db.mainToDoList[index][1],
                             onChanged: (value) => checkBoxChange(value, index),
                             activeColor: appBarColor,
                             shape: RoundedRectangleBorder(
@@ -580,14 +586,14 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         title: Text(
-                          db.toDolist[index][0],
+                          db.mainToDoList[index][0],
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            decoration: db.toDolist[index][1]
+                            decoration: db.mainToDoList[index][1]
                                 ? TextDecoration.lineThrough
                                 : TextDecoration.none,
-                            color: db.toDolist[index][1]
+                            color: db.mainToDoList[index][1]
                                 ? Colors.grey
                                 : Colors.black87,
                           ),
@@ -616,7 +622,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-              childCount: db.toDolist.length,
+              childCount: db.mainToDoList.length,
             ),
           ),
           // Footer padding
