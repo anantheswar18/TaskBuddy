@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:think_todo_list/bottomBar/bottom_nav_bar.dart';
+import 'package:think_todo_list/auth/fingerprint_page.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
   // Open both boxes
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: BottomNavBar(),
+      home: AuthenticationWrapper(),
     );
   }
 }
