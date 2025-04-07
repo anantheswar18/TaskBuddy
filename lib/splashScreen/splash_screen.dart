@@ -17,8 +17,8 @@ class SplashScreen extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                appBarColor, // Black
-                tileColor, // Dark blue
+                appBarColor,
+                tileColor,
               ],
             ),
           ),
@@ -37,7 +37,7 @@ class SplashScreen extends StatelessWidget {
           nextScreen: BottomNavBar(),
           splashTransition: SplashTransition.fadeTransition,
           backgroundColor: Colors.transparent,
-          splashIconSize: 700, // Adjust size as needed
+          splashIconSize: 700,
         ),
       ],
     );

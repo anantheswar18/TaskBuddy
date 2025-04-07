@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
-// Animated text for splash screen
 class AnimatedTaskBuddyText extends StatelessWidget {
   const AnimatedTaskBuddyText({super.key});
 
@@ -10,19 +9,18 @@ class AnimatedTaskBuddyText extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // The GIF image would be above this text
-        SizedBox(height: 20), // Space between image and text
+        SizedBox(height: 20),
         AnimatedTextKit(
           animatedTexts: [
             TypewriterAnimatedText(
-              '📃 TaskBuddy 📃',
+              '📃TaskBuddy📃',
               textStyle: const TextStyle(
-                color: Color.fromARGB(255, 166, 155, 155),
+                color: Color.fromARGB(255, 90, 90, 132),
                 fontWeight: FontWeight.bold,
                 fontSize: 28,
                 fontFamily: 'Montserrat',
               ),
-              speed: const Duration(milliseconds: 200),
+              speed: const Duration(milliseconds: 100),
             ),
           ],
           totalRepeatCount: 1,

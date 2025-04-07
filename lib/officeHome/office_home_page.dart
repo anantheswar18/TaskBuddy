@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:think_todo_list/constants/const.dart';
 import 'package:think_todo_list/data/database.dart';
@@ -382,13 +383,54 @@ class _OfficeHomePageState extends State<OfficeHomePage> {
             expandedHeight: 180.0,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
-                '📃 Office ToDo 📃',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Off",
+                    style: GoogleFonts.oswald(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: Color.fromARGB(255, 97, 132, 170),
+                    ),
+                  ),
+                  Text(
+                    "ice",
+                    style: GoogleFonts.oswald(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                  Text(
+                    " Bu",
+                    style: GoogleFonts.oswald(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 97, 132, 170),
+                    ),
+                  ),
+                  Text(
+                    "dd",
+                    style: GoogleFonts.oswald(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    "y",
+                    style: GoogleFonts.oswald(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 97, 132, 170),
+                    ),
+                  ),
+                ],
               ),
               centerTitle: true,
               background: Container(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:think_todo_list/constants/const.dart';
 import 'package:think_todo_list/data/database.dart';
@@ -372,13 +373,34 @@ class _HomePageState extends State<HomePage> {
             expandedHeight: 180.0,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
-                '📃 Think ToDo 📃',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Task",
+                    style: GoogleFonts.oswald(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w800,
+                        color: Color.fromARGB(255, 90, 90, 132)),
+                  ),
+                  Text(
+                    " Bu",
+                    style: GoogleFonts.oswald(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                  Text(
+                    "ddy",
+                    style: GoogleFonts.oswald(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromARGB(255, 90, 90, 132)),
+                  ),
+                ],
               ),
               centerTitle: true,
               background: Container(
